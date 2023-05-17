@@ -21,3 +21,9 @@ function App() {
 }
 
 export default App
+
+
+//TODO APP
+
+//IMPLEMENT HOME PAGE TODAY
+//IMPLEMENT PRIVATE ROOM SELECT OPEN
