@@ -7,7 +7,12 @@ const client = new Client()
 const account = new Account(client);
 const databases = new Databases(client);
 
-export {account,databases,Query};
+subscribe=(callback)=>{
+    return this.appwrite.subscribe('collections.${this.tasksCollection}.documents')
+}
+
+export {account,databases,Query,ID,client};
+
 
 // Register User
 
