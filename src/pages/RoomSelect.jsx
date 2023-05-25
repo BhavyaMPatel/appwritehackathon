@@ -21,6 +21,11 @@ export default function RoomSelect() {
     message()
   },[]);
 
+  useEffect(()=>{
+    client.subscribe(['databases.6462f35ceb505509c4ff.collections.6462f3deb9ff444beaaf.documents'],response=>{
+      console.log(response.payload)
+    })
+  })
   //Subscribe DataBase 
   
   

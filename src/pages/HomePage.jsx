@@ -17,14 +17,14 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className='w-full sm:w-1/2 sm:p-2 p-5 text-center flex justify-center items-center h-[67vh]'>
-                    <img className='h-[55vh] sm:h-[50vh] md:h-[70vh]' src='/public/image.jpg' alt='Navbackground'/>
+                    <img className='h-[55vh] sm:h-[50vh] md:h-[70vh]' src='/image.jpg' alt='Navbackground'/>
                 </div>
             </div>
 
 
             <div className='flex flex-wrap-reverse sm:mx-20 m-2 h-fit items-center sm:mt-5 md:mt-7'>
                 <div className='w-full sm:w-1/2 sm:p-2 p-5 text-center flex justify-center items-center h-[67vh]'>
-                        <img className='h-4/5' src='/public/image_two.jpg' alt='Navbackground'/>
+                        <img className='h-4/5' src='/image_two.jpg' alt='Navbackground'/>
                 </div>
                 <div className='w-full sm:w-1/2 sm:p-2 p-5 mt-5 h-[50vh] sm:h-[45vh] flex justify-center items-center'>
                     <div className='text-[#183b56] text-3xl md:text-4xl lg:text-4xl font-Poppins text font-semibold'>

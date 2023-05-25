@@ -7,13 +7,15 @@ const client = new Client()
 const account = new Account(client);
 const databases = new Databases(client);
 
-subscribe=(callback)=>{
+let subscribe=(callback)=>{
     return this.appwrite.subscribe('collections.${this.tasksCollection}.documents')
 }
 
 export {account,databases,Query,ID,client};
 
-
+client.subscribe(['collections.6462f3deb9ff444beaaf.documents'],response=>{
+    console.log(response+"mila")
+})
 // Register User
 
 
