@@ -1,23 +1,23 @@
 import React from 'react'
 import { useState} from 'react'
+import { useEffect } from 'react'
 import {account,databases,Query,ID,client} from '../../services/appwriteConfig'
-import {nodeclient,nodedatabase} from '../../services/appwritesdkConfig'
 
-import Room from '../component/Room'
+//Component
 import Alert from '../component/Alert'
 import SelectRoomButton from '../component/SelectRoomButton'
-import { Client } from 'appwrite'
-import { useEffect } from 'react'
+
+
+//Functions
+import {alert,JoinRoom,Chat,Disconnect} from '../functions/function'
+
 
 export default function RoomSelect() {
 
-  const [messagess,setmessagess]= useState('');
   const [RoomStatus,SetRoomStatus]=useState("Join Room");
   const [Room,SetRoom]=useState("Select Room");
-  const [click,Setclick]=useState(0);
   const [Join,SetJoin]=useState(false);
   const [RoomId,SetRoomId]=useState('a');
-  const [Connect,SetConnect]=useState('Connect Now');
 
   useEffect(()=>{
     async function message(){
@@ -37,57 +37,6 @@ export default function RoomSelect() {
     })
   },[RoomId])
   //Subscribe DataBase 
-
- 
-
-
-  function alert(){
-    const ele=document.getElementById("alert-side");
-    ele.classList.toggle("hidden")
-    SetRoomStatus("Join Room");
-  }
-  
-
-  async function JoinRoom(){
-    const x = await nodedatabase.listCollections('6462f35ceb505509c4ff');
-    let data=document.getElementById('default-search')
-    console.log(data.value);
-   
-      if(data.value===""){
-          alert()
-          Setclick(1);
-          SetRoomStatus("Room Not Found")
-      }else{
-          x.collections.forEach((e)=>{
-            if(( e.name == data.value) && !Join){
-              SetRoomStatus("Successfully Joined");
-              SetRoomId(e.$id);
-              SetRoom(data.value)
-              SetJoin(true);
-            }
-          });
-      }
-      if(Join==false){
-        SetRoomStatus("Room Not Found");
-      }
-    
-  }
-
-  async function Chat(){
-    let data=document.getElementById("chat");
-    let msg=document.getElementById("chatmsg");
-    data.innerHTML+= `<div>${msg.value}</div>`
-    await databases.createDocument("6462f35ceb505509c4ff","6462f3deb9ff444beaaf",ID.unique(),{chat:msg.value})
-    msg.value="";
-  }
-
-  function Disconnect(){
-    SetRoomStatus("Join Now");
-    SetRoomId('');
-    SetJoin(false)
-    let data=document.getElementById('default-search')
-    data.value="";
-  }
 
   return (
     <>
@@ -118,6 +67,11 @@ export default function RoomSelect() {
 }
 
 
-// Enter Room Name 
-// Find Room Is Available Or Not ?
-// If Room Is Available Then Connect
+// Enter Room Name                   --Done
+// Find Room Is Available Or Not ?   --Done
+// If Room Is Available Then Connect --Done
+
+
+//Next Todo
+//Manage RealTime DataBase One Upproach -- Add Data In Queue And Render RealTime
+//Delete Message Available In Queue While Leaving Room --
