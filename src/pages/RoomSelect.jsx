@@ -12,6 +12,11 @@ import { useEffect } from 'react'
 export default function RoomSelect() {
 
   const [messagess,setmessagess]= useState('');
+  const [RoomStatus,SetRoomStatus]=useState("Join Room");
+  const [Room,SetRoom]=useState("Select Room");
+  const [click,Setclick]=useState(0);
+  const [join,SetJoin]=useState(0);
+  const [RoomId,SetRoomId]=useState('a');
 
   useEffect(()=>{
     async function message(){
@@ -22,10 +27,11 @@ export default function RoomSelect() {
   },[]);
 
   useEffect(()=>{
-    client.subscribe(['databases.6462f35ceb505509c4ff.collections.6462f3deb9ff444beaaf.documents'],response=>{
+    console.log("hi"+RoomId)
+    client.subscribe([`databases.6462f35ceb505509c4ff.collections.${RoomId}.documents`],response=>{
       console.log(response.payload)
     })
-  })
+  },[RoomId])
   //Subscribe DataBase 
   
   
@@ -46,23 +52,7 @@ export default function RoomSelect() {
   }
 
   async function collection(){
-  let x=await nodedatabase.listCollections('6462f35ceb505509c4ff')
-  console.log(x);
-  //   try{
-  //     const res =await fetch('/v1/databases/6462f35ceb505509c4ff/collections',{  
-  //           headers:{
-  //           'Content-type': 'application/json',
-  //           'Host': 'localhost',
-  //           'X-Appwrite-Response-Format': '1.0.0',
-  //           'X-Appwrite-Project': '645f6479dc1a58ddb3b5',
-  //           'X-Appwrite-Key': 'e48d49263f9ed9fd468b4c20af7b3271e416321081c117c75ecdada8994a9aad8dc48be3d524a099bbe6594eadf12d01b040230883b5e4c8445f9cdb06907755a75774561a2d34bb22e1baecaa7f311f498ae080fdc770c6ac99ebf191fc2d6b79c63fb866b338f44fa165c5ee8746352599f1388f92fbd68149dd257040354d'
-  //           }
-  //     });
-  //     console.log(res)
-  // }
-  // catch(e){
-  //     console.log(e);
-  // }
+    
   }
 
   function alert(){
@@ -76,21 +66,28 @@ export default function RoomSelect() {
     console.log(e);
     SetActive(e);
   }
-  const [RoomStatus,SetRoomStatus]=useState("Join Room");
-  const [Room,SetRoom]=useState("Select Room");
-  const [click,Setclick]=useState(0);
-  function Name(){
-    console.log("HI NAME KO CALL KIYA KYA");
+
+
+  async function JoinRoom(){
+    const x = await nodedatabase.listCollections('6462f35ceb505509c4ff');
     let data=document.getElementById('default-search')
-    if(data.value===""){
-      alert()
-      Setclick(1)
-      SetRoomStatus("Room Not Found")
-    }else{
-      SetRoomStatus("Successfully Joined");
-      SetRoom(data.value)
-    }
-    data.value=''
+    console.log(data.value);
+      if(data.value===""){
+          alert()
+          Setclick(1);
+          SetRoomStatus("Room Not Found")
+      }else{
+          x.collections.forEach((e)=>{
+            if(( e.name == data.value) && !join){
+              SetRoomStatus("Successfully Joined");
+              SetRoomId(e.$id);
+              console.log(RoomId);
+              SetRoom(data.value)
+              SetJoin(1);
+            }
+          });
+      }
+      data.value=''
   }
 
   async function Chat(){
@@ -107,7 +104,7 @@ export default function RoomSelect() {
     <Alert fun={alert}/>
     <div className='m-2 p-0 flex sm:flex-row flex-col h-screen sm:space-x-1'>
         <div className='border-2 border-solid border-red-500 sm:w-2/6 sm:m-0 m-2 sm:inline-block '>  
-            <SelectRoomButton Name={Name} Status={RoomStatus}/>
+            <SelectRoomButton JoinRoom={JoinRoom} Status={RoomStatus} />
         </div>
         <div className='relative border-2 border-solid border-red-500 sm:w-4/6 sm:m-0 m-2 inline-block overflow-auto'>
           <div id="chat">
@@ -129,6 +126,6 @@ export default function RoomSelect() {
 }
 
 
-// Enter Room Name
+// Enter Room Name 
 // Find Room Is Available Or Not ?
 // If Room Is Available Then Connect

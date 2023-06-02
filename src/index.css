@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.dialog{
+  position: inherit;
+}
 .button {
   display: flex;
   overflow: hidden;
