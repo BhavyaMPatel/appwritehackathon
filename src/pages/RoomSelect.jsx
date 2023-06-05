@@ -45,11 +45,13 @@ export default function RoomSelect() {
 
     useEffect(()=>{
       console.log(RoomId)
+      let mesg;
       client.subscribe([`databases.6462f35ceb505509c4ff.collections.${RoomId}.documents`],response=>{
-          console.log(response.payload.chat)
-          let Mes={id:uuid(),Messagee:response.payload.chat}
-          setmessage([...message,Mes]);
-      });
+          mesg=response.payload.chat
+          let data=document.getElementById("chat");
+          data.innerHTML+=`<div clasName="text-pink-500" >${mesg}</div>`
+        });
+       
     },[RoomId])
 
 
@@ -88,6 +90,7 @@ export default function RoomSelect() {
     SetJoin(false)
     let data=document.getElementById('default-search')
     data.value="";
+    SetRoom('')
     JoinR--; //Temp Solution
   }
 
@@ -95,7 +98,7 @@ export default function RoomSelect() {
     let data=document.getElementById("chat");
     let msg=document.getElementById("chatmsg");
     // data.innerHTML+= `<div>${msg.value}</div>`
-    await databases.createDocument("6462f35ceb505509c4ff","647d8f13ddc0256cb4f4",ID.unique(),{chat:msg.value})
+    await databases.createDocument("6462f35ceb505509c4ff",RoomId,ID.unique(),{chat:msg.value})
     msg.value="";
   }
 
@@ -108,8 +111,6 @@ export default function RoomSelect() {
 
   return (
     <>
-    <Alert fun={alert}/>
-    <button onClick={Mes}>Click Me</button>
     <div className='m-2 p-0 flex sm:flex-row flex-col h-screen sm:space-x-1'>
         <div className='border-2 border-solid border-pink-500 rounded-lg sm:w-2/6 sm:m-0 m-2 sm:inline-block '>  
             <SelectRoomButton JoinRoom={JoinRoom} Status={RoomStatus} />
@@ -134,6 +135,20 @@ export default function RoomSelect() {
     </>
   )
 }
+
+
+// Enter Room Name                   --Done
+// Find Room Is Available Or Not ?   --Done
+// If Room Is Available Then Connect --Done
+// Room Join Interraction Done
+
+//Next Todo
+//Manage RealTime DataBase One Upproach -- Add Data In Queue And Render RealTime
+//Delete Message Available In Queue While Leaving Room --
+
+/// Main Goal Is To Store Up Commig Messages Into State Variable ANd Store Them Into Queue And Render MEssage From Queue  --Done
+
+///Now IF Some Body Send Message Then Add To That Queue --- 
 
 
 // Enter Room Name                   --Done

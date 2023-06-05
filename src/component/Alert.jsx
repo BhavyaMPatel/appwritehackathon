@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Alter({fun}) {
+export default function Alter({fun,style}) {
   return (
     <>
     <div id='alert-side' className='hidden flex flex-wrap bg-[#f02e65] text-white m-2 p-2 sm:m-5 sm:p-3 text-xs rounded-full justify-center items-center font-Poppins'>
