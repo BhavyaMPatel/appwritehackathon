@@ -12,10 +12,12 @@ import MessageChat from '../component/MessageChat'
 
 //Functions
 import {alert} from '../functions/function'
+import { Query } from 'node-appwrite'
 
 
 export default function RoomSelect() {
   
+    let JoinR=0;
 
     const [RoomStatus,SetRoomStatus]=useState("Join Room");
     const [Room,SetRoom]=useState("Select Room");
@@ -31,7 +33,25 @@ export default function RoomSelect() {
         }
     ]);
 
-    let JoinR=0;
+    
+    useEffect(()=>{
+      async function message(){
+        let message2=await databases.listDocuments("6462f35ceb505509c4ff","647d8f13ddc0256cb4f4",[Query.limit(100)])
+        console.log(message2)
+      }
+      message()
+    },[]);
+
+
+    useEffect(()=>{
+      console.log(RoomId)
+      client.subscribe([`databases.6462f35ceb505509c4ff.collections.${RoomId}.documents`],response=>{
+          console.log(response.payload.chat)
+          let Mes={id:uuid(),Messagee:response.payload.chat}
+          setmessage([...message,Mes]);
+      });
+    },[RoomId])
+
 
     async function JoinRoom(){
     const x = await nodedatabase.listCollections('6462f35ceb505509c4ff');
@@ -75,30 +95,9 @@ export default function RoomSelect() {
     let data=document.getElementById("chat");
     let msg=document.getElementById("chatmsg");
     // data.innerHTML+= `<div>${msg.value}</div>`
-    await databases.createDocument("6462f35ceb505509c4ff","6462f3deb9ff444beaaf",ID.unique(),{chat:msg.value})
-
+    await databases.createDocument("6462f35ceb505509c4ff","647d8f13ddc0256cb4f4",ID.unique(),{chat:msg.value})
     msg.value="";
   }
-
-
-
-
-  useEffect(()=>{
-    async function message(){
-      let message2=await databases.listDocuments("6462f35ceb505509c4ff","6462f3deb9ff444beaaf")
-      console.log(message2)
-    }
-    message()
-  },[]);
-
-  useEffect(()=>{
-    console.log(RoomId)
-    client.subscribe([`databases.6462f35ceb505509c4ff.collections.${RoomId}.documents`],response=>{
-      let data=document.getElementById("chat");
-      let Mes={Message:response.payload.chat}
-      data.innerHTML+=`<div className="m-2 p-2 font-Poppins text-pink-500">${response.payload.chat}</div>`
-    })
-  },[RoomId])
 
   
   //Subscribe DataBase 
