@@ -21,7 +21,7 @@ export default function Navbar() {
                     <a className="md:p-4 py-2 block font-Inter text-[#db1a5a] font-semibold " href="/#">WelCome</a>
                 </li>
                 <li>
-                    <a className="md:p-4 py-2 block hover:text-pink-400 text-[#db1a5a] font-Inter font-semibold" href="/Vroom">Chat Room</a>
+                    <a className="md:p-4 py-2 block hover:text-pink-400 text-[#db1a5a] font-Inter font-semibold" href="/VartaLap_Room">Chat Room</a>
                 </li>
             </ul>
         </div>
