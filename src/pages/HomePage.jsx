@@ -1,13 +1,14 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import {client} from '../../services/appwriteConfig'
+import { client } from '../../services/appwriteConfig'
 import { nodedatabase } from '../../services/appwritesdkConfig'
+import { Role } from 'appwrite'
+import { Permission } from 'node-appwrite'
+import { redirect } from "react-router-dom";
 
+//Components
 import Navbar from '../component/Navbar'
-import { ID } from 'node-appwrite'
-import Alter from '../component/Alert'
-
 
 export default function HomePage() {
 
@@ -19,7 +20,6 @@ useEffect(()=>{
 
 const [Exists,SetExists]=useState(false);
 const [canChat,SetcanChat] = useState(false);
-const [Status,SetStatus]=useState('');
 let count;
 
 async function CheckRoom(){
@@ -27,7 +27,7 @@ async function CheckRoom(){
     let Room_Button = document.getElementById('CheckRoom');
     count=0;
     if(input_collection_name===""){
-        console.log("Please Enter Room Name");
+        document.getElementById("ChatNow").innerText="Please Enter Room Name"
     }else{
         let collection_name = ((await nodedatabase.listCollections('6462f35ceb505509c4ff')).collections)
         collection_name.forEach(element => {
@@ -40,31 +40,29 @@ async function CheckRoom(){
                 },2000);
             }   
         });
-    }
-    if(count<1){
-        SetExists(true)
-        SetcanChat(true)
-        document.getElementById("ChatNow").innerText="Click On Chat Now To Start Chat"
 
+        if(count<1){
+            SetExists(true)
+            SetcanChat(true)
+            document.getElementById("Display_Password").innerText=`Room Deletion Key Is -> ${input_collection_name} <- Its Secret ! 🕵️`;
+            document.getElementById("ChatNow").innerText="Click On Chat Now To Start Chat"
+        }
     }
 }
 
 async function ChatNow(){
     let collection_name=document.getElementById("collection_name").value
-    let collection_Id=ID.unique()
-    console.log(collection_Id)
-    // await nodedatabase.createCollection("6462f35ceb505509c4ff",,collection_name)
-    // await nodedatabase.createStringAttribute('6462f35ceb505509c4ff', collection_Id,'chat', 100, false);
-    // await nodedatabase.createStringAttribute('6462f35ceb505509c4ff', collection_Id,'name',100, false);
+    await nodedatabase.createCollection("6462f35ceb505509c4ff",collection_name,collection_name,[Permission.read(Role.any()),Permission.create(Role.any()),Permission.delete(Role.any()),Permission.write(Role.any(),Permission.update(Role.any()))   ])
+    await nodedatabase.createStringAttribute('6462f35ceb505509c4ff', collection_name,'chat', 100, false);
+    await nodedatabase.createStringAttribute('6462f35ceb505509c4ff', collection_name,'name',100, false);
     console.log("Created")
+    window.location.href='/VartaLap_Room'
 }
 
 
 return (
-
 <>
 <Navbar/>
-    <Alter/>
     <div className='flex flex-wrap sm:mx-20 mt-20 h-fit items-center'>
         <div className='w-full sm:w-1/2 sm:p-2 p-5 h-[45vh] flex justify-center items-center'>
             <div className='text-[#373b4e] fill-[#606a7b] text-4xl md:text-4xl lg:text-5xl font-Poppins font-semibold'>
@@ -80,7 +78,9 @@ return (
                         </div>
                         { !Exists && <button onClick={CheckRoom} id="CheckRoom" className="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-400 hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-pink-700 dark:focus:text-white dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:text-white dark:hover:bg-slate-900 "><svg className="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>Check Availability</button>}
                         {  canChat && <button onClick={ChatNow} id="CheckRoom" className="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-400 hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-pink-700 dark:focus:text-white dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:text-white dark:hover:bg-slate-900 "><svg className="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>Chat Now</button>}
+                        <div id="Display_Password" className='font-Poppins text-pink-600 text-sm'></div>
                         <div id="ChatNow" className='font-Poppins text-green-500 text-sm'></div>
+                        <button onClick={()=>{room.close()}} className=" inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-400 hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-pink-700 dark:focus:text-white dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:text-white dark:hover:bg-slate-900 "><svg className="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>Close</button>
                     </dialog>
                 <button onClick={()=>{room.showModal()}} className=" inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-400 hover:bg-gray-100 hover:text-pink-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-pink-700 dark:focus:text-white dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:text-white dark:hover:bg-slate-900 "><svg className="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>Make Your Room Now</button>
             </div>

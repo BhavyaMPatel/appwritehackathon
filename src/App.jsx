@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomePage/>} />
-        <Route path='/VRoom' element={<RoomSelect/>} />
+        <Route path='/VartaLap_Room' element={<RoomSelect/>} />
       </Routes>
     </BrowserRouter>
     </>

@@ -104,11 +104,6 @@ export default function RoomSelect() {
 
   
   //Subscribe DataBase 
-  function Mes(){
-    const Mes={id:uuid(),Messagee:"Huuui"}
-    setmessage([...message,Mes])
-  }
-
   return (
     <>
     <div className='m-2 p-0 flex sm:flex-row flex-col h-screen sm:space-x-1'>
