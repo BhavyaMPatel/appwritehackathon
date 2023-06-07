@@ -6,12 +6,6 @@ export default function Room({Play}) {
     <>
     <div className='flex flex-col'>
                 <RoomButton RoomName={"Vartalap1"} Play={Play}/>
-                <RoomButton RoomName={"Vartalap2"} Play={Play} />
-                <RoomButton RoomName={"Vartalap3"} Play={Play}/>
-                <RoomButton RoomName={"Vartalap4"} Play={Play}/>
-                <RoomButton RoomName={"Vartalap5"} Play={Play}/>
-                <RoomButton RoomName={"Vartalap6"} Play={Play}/>
-                <RoomButton RoomName={"Vartalap7"} Play={Play}/>
     </div>
     </>
   )
